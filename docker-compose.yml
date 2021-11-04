@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  signdb:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "P@ssword56"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"    
+    
+  signapi:
+    image: ${DOCKER_REGISTRY-}signapi
+    build:
+      context: .
+      dockerfile: SignApi/Dockerfile
+    depends_on:
+      - signdb
+  productapi:
+    image: ${DOCKER_REGISTRY-}productapi
+    build:
+      context: .
+      dockerfile: ProductApi/Dockerfile
+
+
+  healthcheck:
+    image: ${DOCKER_REGISTRY-}healthcheck
+    build:
+      context: .
+      dockerfile: HealthCheck/Dockerfile
+

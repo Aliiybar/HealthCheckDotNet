@@ -1,0 +1,47 @@
+version: '3.4'
+
+services:
+  signapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:44311;http://+:8011
+      - ASPNETCORE_HTTPS_PORT=44311
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=pa55word
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dev_cert.pfx
+    ports:
+      - "8011:8011"
+      - "44311:44311"
+    volumes:
+      - ./conf.d/https/:/https/
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      
+  productapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:44322;http://+:8022
+      - ASPNETCORE_HTTPS_PORT=44322
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=pa55word
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dev_cert.pfx
+    ports:
+      - "8022:8022"
+      - "44322:44322"
+    volumes:
+      - ./conf.d/https/:/https/
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+
+  healthcheck:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:44333;http://+:8033
+      - ASPNETCORE_HTTPS_PORT=44333
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=pa55word
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/dev_cert.pfx
+    ports:
+      - "8033:8033"
+      - "44333:44333"
+    volumes:
+      - ./conf.d/https/:/https/
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
